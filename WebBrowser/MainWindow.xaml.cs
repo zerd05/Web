@@ -114,6 +114,8 @@ namespace WebBrowser
 
         private void UpdateURL(object sender, object e)
         {
+
+
             Dispatcher.Invoke(()=>URLbox.Text = ((ChromiumWebBrowser)sender).Address);
             Dispatcher.Invoke(() => CanGo());
 
@@ -142,22 +144,23 @@ namespace WebBrowser
         {
 
 
-            TabItem CurrentTab = (TabItem)Tabs.Items[Tabs.SelectedIndex];
-            BrowserTab CurrentBrowser = (BrowserTab)CurrentTab.Content;
-            if (CurrentBrowser.Browser.CanGoForward)
-                ForwardButton.IsEnabled = true;
-            else
-                ForwardButton.IsEnabled = false;
+            //TabItem CurrentTab = (TabItem)Tabs.Items[Tabs.SelectedIndex];
+            //BrowserTab CurrentBrowser = (BrowserTab)CurrentTab.Content;
+            //if (CurrentBrowser.Browser.CanGoForward)
+            //    ForwardButton.IsEnabled = true;
+            //else
+            //    ForwardButton.IsEnabled = false;
 
-            if (CurrentBrowser.Browser.CanGoBack)
-                BackButton.IsEnabled = true;
-            else
-                BackButton.IsEnabled = false;
+            //if (CurrentBrowser.Browser.CanGoBack)
+            //    BackButton.IsEnabled = true;
+            //else
+            //    BackButton.IsEnabled = false;
         }
 
         private void OnFormLoad(object sender, RoutedEventArgs e)
         {
             NewTab(null,null);
+            URLbox.TextWrapping = TextWrapping.NoWrap;
         }
 
         private void CloseTab(object sender, RoutedEventArgs e)

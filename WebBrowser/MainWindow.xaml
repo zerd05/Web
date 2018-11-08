@@ -1,0 +1,49 @@
+﻿<Window 
+        MinHeight="800"
+    MinWidth="1000"
+    WindowState="Maximized"
+        Name="MainForm"
+        Loaded="OnFormLoad"
+        x:Class="WebBrowser.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WebBrowser"
+        xmlns:cefSharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="550.5" Width="1206.5">
+
+    <Grid>
+
+        <Grid>
+            <TextBox Height="25" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"  Name="URLbox" HorizontalAlignment="Stretch"  Margin="120,1,283,0" MaxLines="1" KeyDown="OnEnterURLBox" />
+            <Button Content="Новая вкладка" VerticalAlignment="Top" Click="NewTab" Height="25" Margin="0,1,114,0" HorizontalAlignment="Right" Width="89"/>
+            <Button Content="Перейти" HorizontalAlignment="Right" Margin="0,1,208,0" VerticalAlignment="Top" Width="70" Height="25" Click="Go" Name="GoButton" />
+            <Button Content="Закрыть влкадку" HorizontalAlignment="Right" Margin="0,1,5,0" VerticalAlignment="Top" Width="100" Height="25" Click="CloseTab"/>
+
+
+            <Button Content="Назад" HorizontalAlignment="Left" Margin="1,1,0,0" VerticalAlignment="Top" Width="55" Height="25" Click="GoBack" Name="BackButton"/>
+            <Button Content="Вперед" HorizontalAlignment="Left" Margin="60,1,0,0" VerticalAlignment="Top" Width="55" Height="25" Click="GoForward" Name="ForwardButton"/>
+           
+
+
+
+        </Grid>
+        <Grid Margin="0,25,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="379*"/>
+                <ColumnDefinition Width="17*"/>
+            </Grid.ColumnDefinitions>
+            <TabControl  Name="Tabs" Grid.ColumnSpan="2" SelectionChanged="ChangeTab">
+
+
+            </TabControl>
+        </Grid>
+
+
+
+
+
+    </Grid>
+</Window>

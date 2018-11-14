@@ -2,6 +2,7 @@
         MinHeight="800"
     MinWidth="1000"
     WindowState="Maximized"
+    KeyDown="MainWindow_OnKeyDown"
         Name="MainForm"
         Loaded="OnFormLoad"
         x:Class="WebBrowser.MainWindow"
@@ -12,9 +13,12 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="550.5" Width="1206.5">
 
+
     <Grid>
 
+
         <Grid>
+            
             <TextBox Height="25" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"  Name="URLbox" HorizontalAlignment="Stretch"  Margin="120,1,283,0" MaxLines="1" KeyDown="OnEnterURLBox"  />
             <Button Content="Новая вкладка" VerticalAlignment="Top" Click="NewTab" Height="25" Margin="0,1,114,0" HorizontalAlignment="Right" Width="89"/>
             <Button Content="Перейти" HorizontalAlignment="Right" Margin="0,1,208,0" VerticalAlignment="Top" Width="70" Height="25" Click="Go" Name="GoButton" />
@@ -29,13 +33,10 @@
 
         </Grid>
         <Grid Margin="0,25,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="379*"/>
-                <ColumnDefinition Width="17*"/>
-            </Grid.ColumnDefinitions>
-            <TabControl  Name="Tabs" Grid.ColumnSpan="2" SelectionChanged="ChangeTab">
 
+            <TabControl  Name="Tabs" Grid.ColumnSpan="2" SelectionChanged="UpdateURL">
 
+       
             </TabControl>
         </Grid>
 

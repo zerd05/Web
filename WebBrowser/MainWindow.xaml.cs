@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows.Threading;
 using CefSharp.Wpf;
 using CefSharp;
 
@@ -24,7 +15,7 @@ namespace WebBrowser
     /// 
     public partial class MainWindow : Window
     {
-        private int TabsCount = 1;
+        //private int TabsCount = 1;
         
 
         public MainWindow()
@@ -32,129 +23,136 @@ namespace WebBrowser
             InitializeComponent();
         }
 
-
-
         private void NewTab(object sender, RoutedEventArgs e)
         {
-
-            BrowserTab Tab = new BrowserTab();
-           
-           
-            Tab.Browser.Address = "google.com";
-            
-            Tab.Children.Add(Tab.Browser);
-            
-
-            Tabs.Items.Add(new TabItem
-            {
-                Header = "Вкладка " + Convert.ToString(TabsCount),
-                Content = Tab,
-                IsSelected = true
-
-        });
-      
+          
+          
+            BrowserTab NewBrowserTab = new BrowserTab();
 
 
-            TabsCount++;
+            NewBrowserTab.DublicateMenuItem.Click += DublicateTab;
+            NewBrowserTab.Browser.LoadingStateChanged += UpdateURL;
+            NewBrowserTab.CloseTabMenuItem.Click += CloseTab;
+
+            Tabs.Items.Add(NewBrowserTab);
             Dispatcher.InvokeAsync(() => Go(null, null));
-           
+        }
 
+        private void DublicateTab(object sender, RoutedEventArgs e)
+        {
+            BrowserTab NewBrowserTab = new BrowserTab();
+            NewBrowserTab.Browser.Address = ((BrowserTab) Tabs.Items[Tabs.SelectedIndex]).Browser.Address;
+            NewBrowserTab.IsSelected = true;
+
+
+            NewBrowserTab.DublicateMenuItem.Click += DublicateTab;
+            NewBrowserTab.Browser.LoadingStateChanged += UpdateURL;
+            NewBrowserTab.CloseTabMenuItem.Click += CloseTab;
+
+            Tabs.Items.Add(NewBrowserTab);
         }
 
         private void Go(object sender, RoutedEventArgs e)
         {
-            TabItem CurrentTab = (TabItem) Tabs.Items[Tabs.SelectedIndex];
-            BrowserTab CurrentBrowser = (BrowserTab)CurrentTab.Content;
-            CurrentBrowser.Browser.Address = URLbox.Text;
-            CurrentBrowser.Browser.WebBrowser.FrameLoadEnd += UpdateURL;
-            CurrentBrowser.Browser.WebBrowser.LoadingStateChanged += UpdateURL;
-            Dispatcher.Invoke(() => CanGo());
- 
+            ((BrowserTab) Tabs.Items[Tabs.SelectedIndex]).Browser.Address = URLbox.Text;
+
+
         }
 
-        public class BrowserTab:Grid
+        public class BrowserTab:TabItem
         {
             public ChromiumWebBrowser Browser;
-
+            public Grid grid;
+            public ContextMenu TabContextMenu;
+            public MenuItem DublicateMenuItem;
+            public MenuItem CloseTabMenuItem;
 
             public BrowserTab()
             {
                 Browser = new ChromiumWebBrowser();
-                
-            }
-            private void GetURL(object sender, FrameLoadEndEventArgs e)
-            {
-                MessageBox.Show("Страница загруженна");
+                grid = new Grid();
+                TabContextMenu = new ContextMenu();
                
+
+                Content = grid;
+                grid.Children.Add(Browser);
+                Header = "Новая вкладка";
+                Browser.Address = "google.com";
+                IsSelected = true;
+                Browser.FrameLoadStart += UpdateTitle;
+                Browser.LoadingStateChanged += UpdateTitle;
+                Browser.FrameLoadEnd += UpdateTitle;
+                InitContextMenu();
+
             }
+
+            private void InitContextMenu()
+            {
+
+                DublicateMenuItem = new MenuItem {Header = "Дублировать вкладку"};
+                DublicateMenuItem.Click += SelectTab;
+
+                CloseTabMenuItem = new MenuItem{Header = "Закрыть вкладку"};
+                CloseTabMenuItem.Click += SelectTab;
+
+                TabContextMenu.Items.Add(DublicateMenuItem);
+                TabContextMenu.Items.Add(CloseTabMenuItem);
+                ContextMenu = TabContextMenu;
+            }
+
+            private void SelectTab(object sender, RoutedEventArgs e)
+            {
+                IsSelected = true;
+            }
+
+            private void UpdateTitle(object sender, object e)
+            {
+                Dispatcher.Invoke(new Action(delegate()
+                {
+                    if (Browser.Title != null)
+                        Header = Browser.Title;
+                }));
+              
+            }
+ 
 
 
         }
 
         private void GoBack(object sender, RoutedEventArgs e)
         {
-            TabItem CurrentTab = (TabItem)Tabs.Items[Tabs.SelectedIndex];
-            BrowserTab CurrentBrowser = (BrowserTab)CurrentTab.Content;
-            if(CurrentBrowser.Browser.CanGoBack)
-            CurrentBrowser.Browser.WebBrowser.Back();
-            Dispatcher.Invoke(() => CanGo());
+            if(((BrowserTab)Tabs.Items[Tabs.SelectedIndex]).Browser.CanGoBack)
+                ((BrowserTab)Tabs.Items[Tabs.SelectedIndex]).Browser.WebBrowser.Back();
+            
 
         }
 
         private void GoForward(object sender, RoutedEventArgs e)
         {
-            TabItem CurrentTab = (TabItem)Tabs.Items[Tabs.SelectedIndex];
-            BrowserTab CurrentBrowser = (BrowserTab)CurrentTab.Content;
-            if (CurrentBrowser.Browser.CanGoForward)
-                CurrentBrowser.Browser.WebBrowser.Forward();
-            Dispatcher.Invoke(() => CanGo());
-
-
+           
+            if (((BrowserTab)Tabs.Items[Tabs.SelectedIndex]).Browser.CanGoForward)
+                ((BrowserTab)Tabs.Items[Tabs.SelectedIndex]).Browser.WebBrowser.Forward();
         }
+
 
         private void UpdateURL(object sender, object e)
         {
-
-
-            Dispatcher.Invoke(()=>URLbox.Text = ((ChromiumWebBrowser)sender).Address);
-            Dispatcher.Invoke(() => CanGo());
-
-
-
-        }
-
-        private void ChangeTab(object sender, object e)
-        {
-            try
-            {
-                TabItem CurrentTab = (TabItem) Tabs.Items[Tabs.SelectedIndex];
-                BrowserTab CurrentBrowser = (BrowserTab) CurrentTab.Content;
-                URLbox.Text = CurrentBrowser.Browser.Address;
-                
-                CanGo();
-            }
-            catch
-            {
-
-            }
             
-        }
+                Dispatcher.Invoke(delegate()
+                {
+                    try
+                    {
+                        URLbox.Text = ((BrowserTab) Tabs.Items[Tabs.SelectedIndex]).Browser.Address;
+                    }
+                    catch
+                    {
 
-        private void CanGo()
-        {
+                    }
+                    
+                });
+           
 
 
-            //TabItem CurrentTab = (TabItem)Tabs.Items[Tabs.SelectedIndex];
-            //BrowserTab CurrentBrowser = (BrowserTab)CurrentTab.Content;
-            //if (CurrentBrowser.Browser.CanGoForward)
-            //    ForwardButton.IsEnabled = true;
-            //else
-            //    ForwardButton.IsEnabled = false;
-
-            //if (CurrentBrowser.Browser.CanGoBack)
-            //    BackButton.IsEnabled = true;
-            //else
-            //    BackButton.IsEnabled = false;
         }
 
         private void OnFormLoad(object sender, RoutedEventArgs e)
@@ -165,19 +163,37 @@ namespace WebBrowser
 
         private void CloseTab(object sender, RoutedEventArgs e)
         {
-
-            //Tabs.Items[Tabs.SelectedIndex] = null;
-            
+            if(Tabs.SelectedIndex!=-1)
             Tabs.Items.Remove(Tabs.Items[Tabs.SelectedIndex]);
-            
-            //Tabs.SelectedIndex -= 1;
-
+            else
+            {
+                URLbox.Text = "";
+            }
         }
 
         private void OnEnterURLBox(object sender, KeyEventArgs e)
         {
             if(e.Key == Key.Enter)
                 Go(null,null);
+        }
+
+        private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F12)
+            {
+                WindowStyle = WindowStyle.None;
+                WindowState = WindowState.Maximized;
+                ResizeMode = ResizeMode.NoResize;
+                Topmost = true;
+                
+            }
+
+            if (e.Key == Key.F10)
+            {
+                WindowStyle = WindowStyle.ThreeDBorderWindow;
+            }
+                
+
         }
     }
 

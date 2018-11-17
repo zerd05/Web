@@ -16,7 +16,7 @@ namespace WebBrowser
     public partial class MainWindow : Window
     {
         //private int TabsCount = 1;
-        
+        private bool FulScreen = false;
 
         public MainWindow()
         {
@@ -42,7 +42,6 @@ namespace WebBrowser
         {
             BrowserTab NewBrowserTab = new BrowserTab();
             NewBrowserTab.Browser.Address = ((BrowserTab) Tabs.Items[Tabs.SelectedIndex]).Browser.Address;
-            NewBrowserTab.IsSelected = true;
 
 
             NewBrowserTab.DublicateMenuItem.Click += DublicateTab;
@@ -63,9 +62,12 @@ namespace WebBrowser
         {
             public ChromiumWebBrowser Browser;
             public Grid grid;
+            public bool Pined;  //Закреплена ли вкладка
+
             public ContextMenu TabContextMenu;
             public MenuItem DublicateMenuItem;
             public MenuItem CloseTabMenuItem;
+            public MenuItem PinTabMenuItem;
 
             public BrowserTab()
             {
@@ -95,9 +97,20 @@ namespace WebBrowser
                 CloseTabMenuItem = new MenuItem{Header = "Закрыть вкладку"};
                 CloseTabMenuItem.Click += SelectTab;
 
+                PinTabMenuItem = new MenuItem{Header = "Закрепить/Открепить вкладку"};
+                PinTabMenuItem.Click += PinTab;
+
                 TabContextMenu.Items.Add(DublicateMenuItem);
                 TabContextMenu.Items.Add(CloseTabMenuItem);
+                TabContextMenu.Items.Add(PinTabMenuItem);
                 ContextMenu = TabContextMenu;
+            }
+
+            private void PinTab(object sender, RoutedEventArgs e)
+            {
+                Pined = !Pined;
+                UpdateTitle(null,null);
+                
             }
 
             private void SelectTab(object sender, RoutedEventArgs e)
@@ -110,7 +123,18 @@ namespace WebBrowser
                 Dispatcher.Invoke(new Action(delegate()
                 {
                     if (Browser.Title != null)
-                        Header = Browser.Title;
+                    {
+                        if (Pined)
+                        {
+                            Header = "🔒 " + Browser.Title;
+                        }
+                        else
+                        {
+                            Header = Browser.Title;
+                        }
+                        
+                    }
+                        
                 }));
               
             }
@@ -164,7 +188,10 @@ namespace WebBrowser
         private void CloseTab(object sender, RoutedEventArgs e)
         {
             if(Tabs.SelectedIndex!=-1)
-            Tabs.Items.Remove(Tabs.Items[Tabs.SelectedIndex]);
+            { 
+                if(!((BrowserTab)Tabs.Items[Tabs.SelectedIndex]).Pined)
+                    Tabs.Items.Remove(Tabs.Items[Tabs.SelectedIndex]);
+            }
             else
             {
                 URLbox.Text = "";
@@ -181,16 +208,26 @@ namespace WebBrowser
         {
             if (e.Key == Key.F12)
             {
-                WindowStyle = WindowStyle.None;
-                WindowState = WindowState.Maximized;
-                ResizeMode = ResizeMode.NoResize;
-                Topmost = true;
+                if (!FulScreen)
+                {
+                    WindowStyle = WindowStyle.None;
+                    WindowState = WindowState.Maximized;
+                    ResizeMode = ResizeMode.NoResize;
+                    FulScreen = !FulScreen;
+                }
+                else
+                {
+                    
+                    WindowStyle = WindowStyle.SingleBorderWindow;
+                    ResizeMode = ResizeMode.CanResize;
+                    FulScreen = !FulScreen;
+                }
                 
             }
 
             if (e.Key == Key.F10)
             {
-                WindowStyle = WindowStyle.ThreeDBorderWindow;
+                
             }
                 
 

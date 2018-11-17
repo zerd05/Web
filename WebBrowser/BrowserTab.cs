@@ -177,22 +177,22 @@ namespace WebBrowser
 
         private void UpdateTitle(object sender, object e)
         {
-            //Dispatcher.Invoke(delegate ()
-            //{
-            //    if (Browser.Title != null)
-            //    {
-            //        if (Pined)
-            //        {
-            //            Header = "🔒 " + Browser.Title;
-            //        }
-            //        else
-            //        {
-            //            Header = Browser.Title;
-            //        }
+            Dispatcher.Invoke(delegate ()
+            {
+                if (Browser.Title != null)
+                {
+                    if (Pined)
+                    {
+                        Header = "🔒 " + Browser.Title;
+                    }
+                    else
+                    {
+                        Header = Browser.Title;
+                    }
 
-            //    }
+                }
 
-            //});
+            });
 
         }
 
@@ -211,14 +211,14 @@ namespace WebBrowser
 
         public void UpdateURL(object sender, object e)
         {
-            //try
-            //{
-            //    Dispatcher.Invoke(()=> UrlTextBox.Text = Browser.Address);
-            //}
-            //catch
-            //{
+            try
+            {
+                Dispatcher.Invoke(() => UrlTextBox.Text = Browser.Address);
+            }
+            catch
+            {
 
-            //}
+            }
         }
 
         public void Navigate(object sender, RoutedEventArgs e)
@@ -252,7 +252,7 @@ namespace WebBrowser
         {
             if(!Pined)
                 ((TabControl)Parent).Items.Remove(this);
-            Browser = default(ChromiumWebBrowser);
+            
         }
 
     }

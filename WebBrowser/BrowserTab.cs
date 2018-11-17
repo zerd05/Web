@@ -109,7 +109,7 @@ namespace WebBrowser
             
 
             Browser = new ChromiumWebBrowser();
-            
+            Browser.DownloadHandler = new DownloadHandler();
             Browser.FrameLoadStart += UpdateTitle;
             Browser.LoadingStateChanged += UpdateTitle;
             Browser.FrameLoadEnd += UpdateTitle;

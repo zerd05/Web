@@ -21,7 +21,19 @@
 
         <Grid Margin="5,5,5,0">
             <TabControl  Name="Tabs" >
-
+               
+                <!--<StackPanel Name="Cnt">
+                    <Label Name="Lab"></Label>
+                    <Button Name="But"></Button>
+                </StackPanel>-->
+                <!--<TabItem>
+                    <TabItem.Header>
+                        <StackPanel Name="Cnt" Orientation="Horizontal">
+                            <Label Name="Lab" Content="X" HorizontalAlignment="Left"></Label>
+                            <Button x:Name="But" Content="Х"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                </TabItem>-->
                 <!--<TabItem Header="Вкладка" >
                     <Grid>
                         <TextBox Height="25" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"  Name="URLbox" HorizontalAlignment="Stretch"  Margin="120,1,283,-1" MaxLines="1"  Grid.ColumnSpan="2"  />

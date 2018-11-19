@@ -28,8 +28,23 @@ namespace WebBrowser
         public MenuItem CloseTabMenuItem;
         public MenuItem PinTabMenuItem;
 
+        public StackPanel HeaderStackPanel;
+        public Button CloseTabHeaderButton;
+        public Label TabTitle;
+
         public BrowserTab()
         {
+            HeaderStackPanel = new StackPanel{Orientation = Orientation.Horizontal};
+            CloseTabHeaderButton = new Button{Content = " X ",HorizontalAlignment = HorizontalAlignment.Right,Height = 19};
+            TabTitle = new Label{HorizontalAlignment = HorizontalAlignment.Left};
+            
+            CloseTabHeaderButton.Click += CloseTab;
+            HeaderStackPanel.Children.Add(TabTitle);
+            HeaderStackPanel.Children.Add(CloseTabHeaderButton);
+           
+            Header = HeaderStackPanel;
+
+           
 
             BrowserGrid = new Grid();
             MainGrid = new Grid();
@@ -76,6 +91,7 @@ namespace WebBrowser
                 VerticalAlignment = VerticalAlignment.Top,
                 Width = 70,
                 Height = 25,
+                ToolTip = "Нажмите для перехода по ссылке в адресной строке"
 
             };
             NavigateButton.Click += Navigate;
@@ -100,6 +116,7 @@ namespace WebBrowser
                 VerticalAlignment = VerticalAlignment.Top,
                 Width = 100,
                 Height = 25
+
             };
             CloseTabButton.Click += CloseTab;
 
@@ -116,13 +133,14 @@ namespace WebBrowser
             Browser.LoadingStateChanged += UpdateURL;
             Browser.FrameLoadStart += UpdateURL;
             Browser.FrameLoadEnd += UpdateURL;
-            
+            Browser.BrowserSettings.ImageLoading = CefState.Enabled;
+           
             TabContextMenu = new ContextMenu();
             Content = MainGrid;
-            Background = new SolidColorBrush(Colors.Blue);
+            Background = new SolidColorBrush(Colors.White);
 
             MainGrid.Margin = new Thickness(1, 1, 1, 1);
-            MainGrid.Background = new SolidColorBrush(Colors.Blue);
+            MainGrid.Background = new SolidColorBrush(Colors.White);
 
             BrowserGrid.Margin = new Thickness(0, 33, 0, 0);
 
@@ -139,7 +157,7 @@ namespace WebBrowser
 
 
             BrowserGrid.Children.Add(Browser);
-            Header = "Новая вкладка";
+            TabTitle.Content = "Новая вкладка";
             Browser.Address = "google.com";
             IsSelected = true;
 
@@ -177,17 +195,19 @@ namespace WebBrowser
 
         private void UpdateTitle(object sender, object e)
         {
+       
+
             Dispatcher.Invoke(delegate ()
             {
                 if (Browser.Title != null)
                 {
                     if (Pined)
                     {
-                        Header = "🔒 " + Browser.Title;
+                        TabTitle.Content = "🔒 " + Browser.Title;
                     }
                     else
                     {
-                        Header = Browser.Title;
+                        TabTitle.Content = Browser.Title;
                     }
 
                 }
@@ -200,6 +220,7 @@ namespace WebBrowser
         {
             BrowserTab addTab = new BrowserTab();
             ((TabControl)Parent).Items.Add(addTab);
+           
         }
 
         public void CloneTab(object sender, object e)
@@ -223,8 +244,8 @@ namespace WebBrowser
 
         public void Navigate(object sender, RoutedEventArgs e)
         {
-            Browser.Address = "";
-            Browser.Load(UrlTextBox.Text);
+            TabTitle.Content = UrlTextBox.Text;
+            Browser.Address = UrlTextBox.Text;
 
         }
 

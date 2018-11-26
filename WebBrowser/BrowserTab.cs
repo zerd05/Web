@@ -10,6 +10,8 @@ namespace WebBrowser
 {
     public class BrowserTab:TabItem
     {
+        public string HistoryPath = @"C:\Users\zerd\Desktop\WebBrowser\WebBrowser\History\History.xml";
+
         public Button ForwardButton;
         public Button BackButton;
         public TextBox UrlTextBox;
@@ -67,6 +69,7 @@ namespace WebBrowser
 
             };
             UrlTextBox.KeyUp += URLboxEnter;
+            
 
             NavigateButton = new Button
             {
@@ -219,6 +222,12 @@ namespace WebBrowser
             {
 
             }
+
+            Dispatcher.Invoke(() => History.AddToHistory(Browser.Address,HistoryPath));
+          
+       
+          
+            
         }
 
         public void Navigate(object sender, RoutedEventArgs e)

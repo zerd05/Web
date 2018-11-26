@@ -32,6 +32,8 @@ namespace WebBrowser
         {
           BrowserTab NewTab = new BrowserTab();
             Tabs.Items.Add(NewTab);
+            HistoryPage a = new HistoryPage();
+            a.Show();
         }
 
        

@@ -30,8 +30,23 @@ namespace WebBrowser
         public MenuItem CloseTabMenuItem;
         public MenuItem PinTabMenuItem;
 
+        public StackPanel HeaderStackPanel;
+        public Button CloseTabHeaderButton;
+        public Label TabTitle;
+
         public BrowserTab()
         {
+            HeaderStackPanel = new StackPanel{Orientation = Orientation.Horizontal};
+            CloseTabHeaderButton = new Button{Content = " X ",HorizontalAlignment = HorizontalAlignment.Right,Height = 19};
+            TabTitle = new Label{HorizontalAlignment = HorizontalAlignment.Left};
+            
+            CloseTabHeaderButton.Click += CloseTab;
+            HeaderStackPanel.Children.Add(TabTitle);
+            HeaderStackPanel.Children.Add(CloseTabHeaderButton);
+           
+            Header = HeaderStackPanel;
+
+
 
             BrowserGrid = new Grid();
             MainGrid = new Grid();
@@ -122,10 +137,10 @@ namespace WebBrowser
             
             TabContextMenu = new ContextMenu();
             Content = MainGrid;
-            Background = new SolidColorBrush(Colors.Blue);
+            Background = new SolidColorBrush(Colors.White);
 
             MainGrid.Margin = new Thickness(1, 1, 1, 1);
-            MainGrid.Background = new SolidColorBrush(Colors.Blue);
+            MainGrid.Background = new SolidColorBrush(Colors.White);
 
             BrowserGrid.Margin = new Thickness(0, 33, 0, 0);
 
@@ -142,7 +157,7 @@ namespace WebBrowser
 
 
             BrowserGrid.Children.Add(Browser);
-            Header = "Новая вкладка";
+            TabTitle.Content = "Новая вкладка";
             Browser.Address = "google.com";
             IsSelected = true;
 
@@ -180,17 +195,34 @@ namespace WebBrowser
 
         private void UpdateTitle(object sender, object e)
         {
+            //Dispatcher.Invoke(delegate ()
+            //{
+            //    if (Browser.Title != null)
+            //    {
+            //        if (Pined)
+            //        {
+            //            Header = "🔒 " + Browser.Title;
+            //        }
+            //        else
+            //        {
+            //            Header = Browser.Title;
+            //        }
+
+            //    }
+
+            //});
+
             Dispatcher.Invoke(delegate ()
             {
                 if (Browser.Title != null)
                 {
                     if (Pined)
                     {
-                        Header = "🔒 " + Browser.Title;
+                        TabTitle.Content = "🔒 " + Browser.Title;
                     }
                     else
                     {
-                        Header = Browser.Title;
+                        TabTitle.Content = Browser.Title;
                     }
 
                 }
@@ -203,6 +235,7 @@ namespace WebBrowser
         {
             BrowserTab addTab = new BrowserTab();
             ((TabControl)Parent).Items.Add(addTab);
+           
         }
 
         public void CloneTab(object sender, object e)

@@ -32,8 +32,7 @@ namespace WebBrowser
         {
           BrowserTab NewTab = new BrowserTab();
             Tabs.Items.Add(NewTab);
-            HistoryPage a = new HistoryPage();
-            a.Show();
+
         }
 
        
@@ -64,6 +63,26 @@ namespace WebBrowser
          
                 
 
+        }
+
+        private void OnChangeTab(object sender, SelectionChangedEventArgs e)
+        {
+            if (Tabs.Items.Count == 0)
+            {
+                Application.Current.Shutdown(0);
+            }
+        }
+
+        private void OpenSettingsWindow(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow a = new SettingsWindow();
+            a.Show();
+        }
+
+        private void OpenHistoryWindow(object sender, RoutedEventArgs e)
+        {
+            HistoryPage a = new HistoryPage();
+            a.Show();
         }
     }
 

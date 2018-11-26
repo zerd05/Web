@@ -1,9 +1,10 @@
 ﻿<Window 
-        MinHeight="800"
+    xmlns:p="clr-namespace:WebBrowser.Properties"
+    MinHeight="800"
     MinWidth="1000"
     WindowState="Maximized"
     KeyDown="MainWindow_OnKeyDown"
-    Background="Aqua"
+    Background="{Binding Source={x:Static p:Settings.Default}, Path=InterfaceColor}"
         Name="MainForm"
         Loaded="OnFormLoad"
         x:Class="WebBrowser.MainWindow"
@@ -15,13 +16,27 @@
         Title="MainWindow" Height="550.5" Width="1206.5">
 
 
-    <Grid>
+    <Grid Background="{Binding Source={x:Static p:Settings.Default},Path=InterfaceColor}">
 
 
 
-        <Grid Margin="5,5,5,0">
-            <TabControl  Name="Tabs" >
+        <Grid Margin="5,5,5,0" Background="{Binding Source={x:Static p:Settings.Default},Path=InterfaceColor}">
+            <Menu Margin="0,0,0,744" Background="{Binding Source={x:Static p:Settings.Default},Path=InterfaceColor}">
+                <MenuItem Header="Всякое" >
+                    <MenuItem Header="Настройки" Click="OpenSettingsWindow"></MenuItem>
+                    <MenuItem Header="История" Click="OpenHistoryWindow"></MenuItem>
+                </MenuItem>
+            </Menu>
+            <TabControl  Name="Tabs" SelectionChanged="OnChangeTab" Margin="0,25,0,0" Background="{Binding Source={x:Static p:Settings.Default},Path=InterfaceColor}">
                
+
+
+
+
+
+
+
+
                 <!--<StackPanel Name="Cnt">
                     <Label Name="Lab"></Label>
                     <Button Name="But"></Button>

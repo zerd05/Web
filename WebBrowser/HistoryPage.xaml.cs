@@ -19,7 +19,7 @@ namespace WebBrowser
     /// </summary>
     public partial class HistoryPage : Window
     {
-        public string HistoryPath = @"C:\Users\zerd\Desktop\WebBrowser\WebBrowser\History\History.xml";
+        public string HistoryPath = Properties.Settings.Default.HistoryPath;
         public HistoryPage()
         {
             InitializeComponent();
@@ -38,8 +38,8 @@ namespace WebBrowser
                 {
                     if (CurrentHistory.URL != "")
                     {
-                        HistoryTable CurrentTable = new HistoryTable(CurrentHistory.URL, CurrentHistory.TdateTime);
-                        tables.Add(CurrentTable);
+                        HistoryTable currentTable = new HistoryTable(CurrentHistory.URL, CurrentHistory.TdateTime);
+                        tables.Add(currentTable);
                     }
                    
                 }

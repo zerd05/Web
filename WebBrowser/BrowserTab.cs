@@ -10,7 +10,7 @@ namespace WebBrowser
 {
     public class BrowserTab:TabItem
     {
-        public string HistoryPath = @"C:\Users\zerd\Desktop\WebBrowser\WebBrowser\History\History.xml";
+        public string HistoryPath = Properties.Settings.Default.HistoryPath;
 
         public Button ForwardButton;
         public Button BackButton;

@@ -10,6 +10,8 @@ namespace WebBrowser
 {
     public class BrowserTab:TabItem
     {
+        public string HistoryPath = Properties.Settings.Default.HistoryPath;
+
         public Button ForwardButton;
         public Button BackButton;
         public TextBox UrlTextBox;
@@ -44,7 +46,7 @@ namespace WebBrowser
            
             Header = HeaderStackPanel;
 
-           
+
 
             BrowserGrid = new Grid();
             MainGrid = new Grid();
@@ -82,6 +84,7 @@ namespace WebBrowser
 
             };
             UrlTextBox.KeyUp += URLboxEnter;
+            
 
             NavigateButton = new Button
             {
@@ -91,7 +94,6 @@ namespace WebBrowser
                 VerticalAlignment = VerticalAlignment.Top,
                 Width = 70,
                 Height = 25,
-                ToolTip = "Нажмите для перехода по ссылке в адресной строке"
 
             };
             NavigateButton.Click += Navigate;
@@ -116,7 +118,6 @@ namespace WebBrowser
                 VerticalAlignment = VerticalAlignment.Top,
                 Width = 100,
                 Height = 25
-
             };
             CloseTabButton.Click += CloseTab;
 
@@ -133,8 +134,7 @@ namespace WebBrowser
             Browser.LoadingStateChanged += UpdateURL;
             Browser.FrameLoadStart += UpdateURL;
             Browser.FrameLoadEnd += UpdateURL;
-            Browser.BrowserSettings.ImageLoading = CefState.Enabled;
-           
+            
             TabContextMenu = new ContextMenu();
             Content = MainGrid;
             Background = new SolidColorBrush(Colors.White);
@@ -195,7 +195,22 @@ namespace WebBrowser
 
         private void UpdateTitle(object sender, object e)
         {
-       
+            //Dispatcher.Invoke(delegate ()
+            //{
+            //    if (Browser.Title != null)
+            //    {
+            //        if (Pined)
+            //        {
+            //            Header = "🔒 " + Browser.Title;
+            //        }
+            //        else
+            //        {
+            //            Header = Browser.Title;
+            //        }
+
+            //    }
+
+            //});
 
             Dispatcher.Invoke(delegate ()
             {
@@ -240,12 +255,18 @@ namespace WebBrowser
             {
 
             }
+
+            Dispatcher.Invoke(() => History.AddToHistory(Browser.Address,HistoryPath));
+          
+       
+          
+            
         }
 
         public void Navigate(object sender, RoutedEventArgs e)
         {
-            TabTitle.Content = UrlTextBox.Text;
-            Browser.Address = UrlTextBox.Text;
+            Browser.Address = "";
+            Browser.Load(UrlTextBox.Text);
 
         }
 

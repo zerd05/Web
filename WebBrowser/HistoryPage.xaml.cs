@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Documents.DocumentStructures;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -47,6 +48,15 @@ namespace WebBrowser
             }
             MainGrid.ItemsSource = tables;
             MainGrid.MaxColumnWidth = 628;
+        }
+
+        private void MainGrid_OnMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            HistoryTable Current = MainGrid.SelectedItem as HistoryTable;
+            BrowserTab NewTab = new BrowserTab();
+            NewTab.Browser.Address = Current.URL;
+            (Tag as MainWindow).Tabs.Items.Add(NewTab);
+            this.Close();
         }
     }
 

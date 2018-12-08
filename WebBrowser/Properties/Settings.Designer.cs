@@ -25,7 +25,7 @@ namespace WebBrowser.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\zerd\\Desktop\\WebBrowser\\WebBrowser\\History\\History.xml")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\zerd\\source\\History\\History.xml")]
         public string HistoryPath {
             get {
                 return ((string)(this["HistoryPath"]));

@@ -4,7 +4,7 @@
     MinWidth="1000"
     WindowState="Maximized"
     KeyDown="MainWindow_OnKeyDown"
-    Background="{Binding Source={x:Static p:Settings.Default}, Path=InterfaceColor}"
+    Background="Aqua"
         Name="MainForm"
         Loaded="OnFormLoad"
         x:Class="WebBrowser.MainWindow"
@@ -16,13 +16,13 @@
         Title="MainWindow" Height="550.5" Width="1206.5">
 
 
-    <Grid Background="{Binding Source={x:Static p:Settings.Default},Path=InterfaceColor}">
+    <Grid Background="Aqua">
 
 
 
-        <Grid Margin="5,5,5,0" Background="{Binding Source={x:Static p:Settings.Default},Path=InterfaceColor}">
-            <Menu Margin="0,0,0,744" Background="{Binding Source={x:Static p:Settings.Default},Path=InterfaceColor}">
-                <MenuItem Header="Всякое" >
+        <Grid Margin="5,5,5,0" Background="Aqua">
+            <Menu Margin="0,0,0,744" Background="Aqua">
+                <MenuItem Header="Меню" >
                     <MenuItem Header="Настройки" Click="OpenSettingsWindow"></MenuItem>
                     <MenuItem Header="История" Click="OpenHistoryWindow"></MenuItem>
                 </MenuItem>

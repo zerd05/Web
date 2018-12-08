@@ -265,8 +265,8 @@ namespace WebBrowser
 
         public void Navigate(object sender, RoutedEventArgs e)
         {
-            Browser.Address = "";
-            Browser.Load(UrlTextBox.Text);
+            Browser.Address = UrlTextBox.Text;
+            //Browser.Load(UrlTextBox.Text);
 
         }
 
@@ -285,8 +285,8 @@ namespace WebBrowser
         {
             if (e.Key == Key.Enter)
             {
-                Browser.Address = "";
-                Browser.Load(UrlTextBox.Text);
+                Browser.Address = UrlTextBox.Text;
+                //Browser.Load(UrlTextBox.Text);
             }
         }
 

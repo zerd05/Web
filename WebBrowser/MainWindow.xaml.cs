@@ -32,6 +32,8 @@ namespace WebBrowser
         {
           BrowserTab NewTab = new BrowserTab();
             Tabs.Items.Add(NewTab);
+      
+
 
         }
 
@@ -82,6 +84,7 @@ namespace WebBrowser
         private void OpenHistoryWindow(object sender, RoutedEventArgs e)
         {
             HistoryPage a = new HistoryPage();
+            a.Tag = this;
             a.Show();
         }
     }
